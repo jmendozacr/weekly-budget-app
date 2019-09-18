@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Error               from './Error';
 
 export default function Question(props) {
 
@@ -25,7 +26,7 @@ export default function Question(props) {
             <h2>Place your budget</h2>
             {
                 error ?
-                    <p className="alert alert-danger error">The budget is incorrect.</p>
+                    <Error message="The budget is incorrect." />
                     : null
             }
             <form onSubmit={addBudget}>

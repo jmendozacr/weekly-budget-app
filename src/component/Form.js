@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Error               from './Error';
 
 function Form(props) {
 
@@ -19,8 +20,14 @@ function Form(props) {
 
     return(
         <form onSubmit={addExpense}>
+            <h2>Add your expenses here</h2>
+            {
+                error ?
+                    <Error message="Both fields are required" />
+                    : null
+            }
             <div className="field">
-                <label>Add your expenses here</label>
+                <label>Expense name</label>
                 <input
                     type="text"
                     className="u-full-width"
@@ -29,7 +36,7 @@ function Form(props) {
                 />
             </div>
             <div className="field">
-                <label>spending amount</label>
+                <label>Spending amount</label>
                 <input
                     type="number"
                     className="u-full-width"
