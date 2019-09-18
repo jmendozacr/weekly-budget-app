@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 
+export default function Question(props) {
 
-export default function Question() {
+    const { setBudget, setBudgetQuestion } = props;
 
     const [amount, setAmount] = useState(0);
     const [error, setError] = useState(false);
@@ -13,8 +14,11 @@ export default function Question() {
             setError(true);
             return;
         }
-    }
 
+        setError(false);
+        setBudget(amount);
+        setBudgetQuestion(false);
+    }
 
     return(
         <>
