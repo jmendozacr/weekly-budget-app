@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import Error               from './Error';
+import shortid             from 'shortid';
 
 function Form(props) {
+
+    const { setExpense } = props;
 
     const [ expenseName, setExpenseName ] = useState("");
     const [ expenseAmount, setExpenseAmount ] = useState(0);
@@ -15,7 +18,16 @@ function Form(props) {
             return;
         }
 
+        const expense = {
+            expenseName,
+            expenseAmount,
+            id: shortid.generate()
+        }
+
+        setExpense(expense);
         setError(false);
+        setExpenseName("");
+        setExpenseAmount("");
     }
 
     return(
@@ -33,6 +45,7 @@ function Form(props) {
                     className="u-full-width"
                     placeholder="Ex. Food"
                     onChange={e => setExpenseName(e.target.value)}
+                    value={expenseName}
                 />
             </div>
             <div className="field">
@@ -42,6 +55,7 @@ function Form(props) {
                     className="u-full-width"
                     placeholder="Ex. 125"
                     onChange={e => setExpenseAmount(parseInt(e.target.value, 10))}
+                    value={expenseAmount}
                 />
             </div>
             

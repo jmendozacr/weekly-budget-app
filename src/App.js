@@ -1,11 +1,18 @@
-import React, { useState } from 'react';
-import Question            from './component/Question';
-import Form                from './component/Form';
+import React, { useState, useEffect } from 'react';
+import Question                       from './component/Question';
+import Form                           from './component/Form';
 
 function App() {
 
   const [ budget, setBudget ] = useState(0);
   const [ budgetQuestion, setBudgetQuestion ] = useState(true);
+  const [ expense, setExpense ] = useState({});
+  const [ expenses, setExpenses ] = useState([]);
+
+  useEffect(() => {
+    const expensesList = [...expenses, expense];
+    setExpenses(expensesList);
+  }, []);
 
   return (
     <div className="App container">
@@ -22,7 +29,7 @@ function App() {
             : <div className="row">
                 <div className="one-half column">
                   <Form
-                  
+                    setExpense={setExpense}
                   />
                 </div>
                 <div className="one-half column">
