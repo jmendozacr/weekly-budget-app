@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Error               from './Error';
-import shortid             from 'shortid';
+import { nanoid }          from 'nanoid';
 
 function Form(props) {
     const { setExpense, setCreateExpense } = props;
@@ -19,7 +19,7 @@ function Form(props) {
         const expense = {
             expenseName,
             expenseAmount,
-            id: shortid.generate()
+            id: nanoid()
         }
 
         setExpense(expense);
