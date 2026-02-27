@@ -41,7 +41,6 @@ function Form(props) {
                 <label>Expense name</label>
                 <input
                     type="text"
-                    className="u-full-width"
                     placeholder="Ex. Food"
                     onChange={e => setExpenseName(e.target.value)}
                     value={expenseName}
@@ -51,18 +50,15 @@ function Form(props) {
                 <label>Spending amount</label>
                 <input
                     type="number"
-                    className="u-full-width"
                     placeholder="Ex. 125"
                     onChange={e => setExpenseAmount(parseInt(e.target.value, 10))}
                     value={expenseAmount}
                 />
             </div>
             
-            <input
-                type="submit"
-                className="button-primary u-full-width"
-                value="Add expense"
-            />
+            <button type="submit">
+                Add expense
+            </button>
         </form>
 
     );

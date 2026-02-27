@@ -3,16 +3,18 @@ import Expense from './Expense';
 
 function ExpensesList({expenses}) {
     return(
-        <div className="expenses-incurred">
-            <h2>List</h2>
-            {
-                expenses.map(expense => (
-                    <Expense
-                        key={expense.id}
-                        expense={expense}
-                    />
-                ))
-            }
+        <div>
+            <h2>Expenses</h2>
+            <ul className="expenses-incurred">
+                {
+                    expenses.map(expense => (
+                        <Expense
+                            key={expense.id}
+                            expense={expense}
+                        />
+                    ))
+                }
+            </ul>
         </div>
     );
 }

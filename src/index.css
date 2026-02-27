@@ -147,6 +147,9 @@ button {
   box-shadow: 0 2px 8px var(--shadow);
   text-transform: none;
   letter-spacing: 0.02em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 button:hover {

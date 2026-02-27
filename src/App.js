@@ -25,38 +25,36 @@ function App() {
   }, [createExpense, expense, expenses, remaining]);
 
   return (
-    <div className="App container">
+    <div className="App">
       <header>
         <h1>Weekly Budget</h1>
-
-        <div className="main-content content">
-          {
-            budgetQuestion ?
-            <Question
-              setBudget={setBudget}
-              setBudgetQuestion={setBudgetQuestion}
-              setRemaining={setRemaining}
-            />
-            : <div className="row">
-                <div className="one-half column">
-                  <Form
-                    setExpense={setExpense}
-                    setCreateExpense={setCreateExpense}
-                  />
-                </div>
-                <div className="one-half column">
-                  <ExpensesList
-                    expenses={expenses}
-                  />
-                  <BudgetControl
-                    budget={budget}
-                    remaining={remaining}
-                  />
-                </div>
-              </div>
-          }
-        </div>
       </header>
+
+      <main className="main-content">
+        {
+          budgetQuestion ?
+          <Question
+            setBudget={setBudget}
+            setBudgetQuestion={setBudgetQuestion}
+            setRemaining={setRemaining}
+          />
+          : <div className="content">
+              <Form
+                setExpense={setExpense}
+                setCreateExpense={setCreateExpense}
+              />
+              <div>
+                <ExpensesList
+                  expenses={expenses}
+                />
+                <BudgetControl
+                  budget={budget}
+                  remaining={remaining}
+                />
+              </div>
+            </div>
+        }
+      </main>
     </div>
   );
 }

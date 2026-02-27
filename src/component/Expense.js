@@ -1,7 +1,7 @@
 import React from 'react';
 
 const Expense = ({expense}) => (
-    <li className="expenses-incurred">
+    <li>
         <p>
             {expense.expenseName}
             <span className="expense">$ {expense.expenseAmount}</span>

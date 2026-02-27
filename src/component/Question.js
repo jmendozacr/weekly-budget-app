@@ -29,17 +29,16 @@ export default function Question(props) {
                     : null
             }
             <form onSubmit={addBudget}>
-                <input
-                    type="number"
-                    className="u-full-width"
-                    placeholder="Add your budget"
-                    onChange={e => setAmount( parseInt(e.target.value, 10) )}
-                />
-                <input
-                    type="submit"
-                    className="button-primary u-full-width"
-                    value="Define Budget"
-                />
+                <div className="field">
+                    <input
+                        type="number"
+                        placeholder="Add your budget"
+                        onChange={e => setAmount( parseInt(e.target.value, 10) )}
+                    />
+                </div>
+                <button type="submit">
+                    Define Budget
+                </button>
             </form>
         </>
     );
