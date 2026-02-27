@@ -1,0 +1,10 @@
+.expense {
+  background: var(--accent-main);
+  color: var(--bg-primary);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-family: 'Nunito', sans-serif;
+  text-transform: none;
+  letter-spacing: 0.02em;
+}

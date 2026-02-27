@@ -1,0 +1,41 @@
+.expensesIncurred {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.expensesIncurred li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  background: var(--bg-primary);
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px var(--shadow);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.expensesIncurred li::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--accent-main);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.expensesIncurred li:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px var(--shadow);
+}
+
+.expensesIncurred li:hover::before {
+  opacity: 1;
+}
