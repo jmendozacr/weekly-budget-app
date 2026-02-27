@@ -1,37 +1,33 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Error               from './Error';
 import { nanoid }          from 'nanoid';
 import { useBudget }       from '../contexts/BudgetContext';
+import { useForm }         from '../hooks/useForm';
 
 function Form() {
     const { setExpense, setCreateExpense } = useBudget();
-    const [ expenseName, setExpenseName ] = useState("");
-    const [ expenseAmount, setExpenseAmount ] = useState(0);
-    const [ error, setError ] = useState(false);
 
-    const addExpense = e => {
-        e.preventDefault();
+    const validationFn = (values) => {
+        return values.expenseAmount >= 1 && !isNaN(values.expenseAmount) && values.expenseName !== "";
+    };
 
-        if(expenseAmount < 1 || isNaN(expenseAmount) || expenseName === "") {
-            setError(true);
-            return;
-        }
-
+    const onSubmit = (values) => {
         const expense = {
-            expenseName,
-            expenseAmount,
+            expenseName: values.expenseName,
+            expenseAmount: values.expenseAmount,
             id: nanoid()
-        }
-
+        };
         setExpense(expense);
         setCreateExpense(true);
-        setError(false);
-        setExpenseName("");
-        setExpenseAmount("");
-    }
+    };
+
+    const { values, error, handleChange, handleSubmit } = useForm(
+        { expenseName: "", expenseAmount: 0 },
+        validationFn
+    );
 
     return(
-        <form onSubmit={addExpense}>
+        <form onSubmit={(e) => handleSubmit(e, onSubmit)}>
             <h2>Add your expenses here</h2>
             {
                 error ?
@@ -42,18 +38,20 @@ function Form() {
                 <label>Expense name</label>
                 <input
                     type="text"
+                    name="expenseName"
                     placeholder="Ex. Food"
-                    onChange={e => setExpenseName(e.target.value)}
-                    value={expenseName}
+                    onChange={handleChange}
+                    value={values.expenseName}
                 />
             </div>
             <div className="field">
                 <label>Spending amount</label>
                 <input
                     type="number"
+                    name="expenseAmount"
                     placeholder="Ex. 125"
-                    onChange={e => setExpenseAmount(parseInt(e.target.value, 10))}
-                    value={expenseAmount}
+                    onChange={handleChange}
+                    value={values.expenseAmount}
                 />
             </div>
             
