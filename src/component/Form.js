@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import Error               from './Error';
 import { nanoid }          from 'nanoid';
+import { useBudget }       from '../contexts/BudgetContext';
 
-function Form(props) {
-    const { setExpense, setCreateExpense } = props;
+function Form() {
+    const { setExpense, setCreateExpense } = useBudget();
     const [ expenseName, setExpenseName ] = useState("");
     const [ expenseAmount, setExpenseAmount ] = useState(0);
     const [ error, setError ] = useState(false);

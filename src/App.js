@@ -1,28 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Question                       from './component/Question';
 import Form                           from './component/Form';
 import ExpensesList                   from './component/ExpensesList';
 import BudgetControl                  from './component/BudgetControl';
+import { useBudget }                  from './contexts/BudgetContext';
 
 function App() {
-  const [ budget, setBudget ] = useState(0);
-  const [ remaining, setRemaining ] = useState(0)
-  const [ budgetQuestion, setBudgetQuestion ] = useState(true);
-  const [ createExpense, setCreateExpense ] = useState(false);
-  const [ expense, setExpense ] = useState({});
-  const [ expenses, setExpenses ] = useState([]);
-
-  useEffect(() => {
-    if(createExpense) {
-      const expensesList = [...expenses, expense];
-      setExpenses(expensesList);
-
-      const budgetRemaining = remaining - expense.expenseAmount;
-      setRemaining(budgetRemaining);
-
-      setCreateExpense(false);
-    }
-  }, [createExpense, expense, expenses, remaining]);
+  const { budgetQuestion } = useBudget();
 
   return (
     <div className="App">
@@ -33,24 +17,12 @@ function App() {
       <main className="main-content">
         {
           budgetQuestion ?
-          <Question
-            setBudget={setBudget}
-            setBudgetQuestion={setBudgetQuestion}
-            setRemaining={setRemaining}
-          />
+          <Question />
           : <div className="content">
-              <Form
-                setExpense={setExpense}
-                setCreateExpense={setCreateExpense}
-              />
+              <Form />
               <div>
-                <ExpensesList
-                  expenses={expenses}
-                />
-                <BudgetControl
-                  budget={budget}
-                  remaining={remaining}
-                />
+                <ExpensesList />
+                <BudgetControl />
               </div>
             </div>
         }

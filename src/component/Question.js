@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import Error               from './Error';
+import { useBudget }       from '../contexts/BudgetContext';
 
-export default function Question(props) {
-    const { setBudget, setBudgetQuestion, setRemaining } = props;
+export default function Question() {
+    const { setBudget, setBudgetQuestion, setRemaining } = useBudget();
     const [amount, setAmount] = useState(0);
     const [error, setError] = useState(false);
 
