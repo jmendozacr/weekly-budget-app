@@ -6,11 +6,11 @@ import { useForm }         from '../hooks/useForm';
 export default function Question() {
     const { setBudget, setBudgetQuestion, setRemaining } = useBudget();
 
-    const validationFn = (values) => {
+    const validationFn = (values: { amount: number }) => {
         return values.amount >= 1 && !isNaN(values.amount);
     };
 
-    const onSubmit = (values) => {
+    const onSubmit = (values: { amount: number }) => {
         setBudget(values.amount);
         setRemaining(values.amount);
         setBudgetQuestion(false);

@@ -1,6 +1,10 @@
 import React from 'react';
 
-const Error = ({message}) => (
+interface ErrorProps {
+  message: string;
+}
+
+const Error: React.FC<ErrorProps> = ({ message }) => (
     <p className="alert alert-danger error">{message}</p>
 )
 

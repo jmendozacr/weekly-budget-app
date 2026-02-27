@@ -1,10 +1,13 @@
 import { useState } from 'react';
 
-export const useForm = (initialValues = {}, validationFn) => {
-  const [values, setValues] = useState(initialValues);
-  const [error, setError] = useState(false);
+export const useForm = <T extends Record<string, any>>(
+  initialValues: T,
+  validationFn?: (values: T) => boolean
+) => {
+  const [values, setValues] = useState<T>(initialValues);
+  const [error, setError] = useState<boolean>(false);
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type } = e.target;
     setValues({
       ...values,
@@ -12,7 +15,7 @@ export const useForm = (initialValues = {}, validationFn) => {
     });
   };
 
-  const handleSubmit = (e, submitFn) => {
+  const handleSubmit = (e: React.FormEvent, submitFn: (values: T) => void) => {
     e.preventDefault();
     if (validationFn && !validationFn(values)) {
       setError(true);

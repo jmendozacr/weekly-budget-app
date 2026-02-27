@@ -3,16 +3,17 @@ import Error               from './Error';
 import { nanoid }          from 'nanoid';
 import { useBudget }       from '../contexts/BudgetContext';
 import { useForm }         from '../hooks/useForm';
+import { Expense }         from '../types';
 
 function Form() {
     const { setExpense, setCreateExpense } = useBudget();
 
-    const validationFn = (values) => {
+    const validationFn = (values: { expenseName: string; expenseAmount: number }) => {
         return values.expenseAmount >= 1 && !isNaN(values.expenseAmount) && values.expenseName !== "";
     };
 
-    const onSubmit = (values) => {
-        const expense = {
+    const onSubmit = (values: { expenseName: string; expenseAmount: number }) => {
+        const expense: Expense = {
             expenseName: values.expenseName,
             expenseAmount: values.expenseAmount,
             id: nanoid()
@@ -54,7 +55,7 @@ function Form() {
                     value={values.expenseAmount}
                 />
             </div>
-            
+
             <button type="submit">
                 Add expense
             </button>

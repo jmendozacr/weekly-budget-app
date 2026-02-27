@@ -1,7 +1,8 @@
 import React from 'react';
 import styles from './Expense.module.css';
+import { Expense as ExpenseType } from '../types';
 
-const Expense = ({expense}) => (
+const Expense: React.FC<{ expense: ExpenseType }> = ({ expense }) => (
     <li>
         <p>
             {expense.expenseName}
