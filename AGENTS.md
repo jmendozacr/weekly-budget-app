@@ -6,46 +6,26 @@ This file contains guidelines for agentic coding assistants working on the Weekl
 
 ### Development Server
 ```bash
-npm start
+npm run dev
 ```
-Runs the app in development mode on http://localhost:3000 with hot reloading.
+Runs the app in development mode on http://localhost:5173 with hot reloading.
 
 ### Production Build
 ```bash
 npm run build
 ```
-Creates an optimized production build in the `build/` directory.
+Creates an optimized production build in the `dist/` directory.
 
-### Testing
+### Preview Production Build
 ```bash
-npm test
+npm run preview
 ```
-Launches Jest test runner in interactive watch mode.
-
-#### Running Specific Tests
-```bash
-# Run tests matching a pattern
-npm test -- --testNamePattern="test name"
-
-# Run tests in specific file
-npm test -- --testPathPattern=path/to/test.tsx
-
-# Run tests in watch mode for specific file
-npm test -- --testPathPattern=path/to/test.tsx --watchAll=false
-```
-
-#### Test Coverage
-```bash
-npm test -- --coverage
-```
-Generates coverage reports.
+Preview the production build locally before deploying.
 
 ### Linting
-ESLint is configured with the default Create React App rules. Lint errors appear in the console during development.
-
-To run linting manually:
+ESLint is configured. To run linting:
 ```bash
-npx eslint src/
+npm run lint
 ```
 
 ### Type Checking
@@ -62,26 +42,34 @@ No dedicated formatter configured. Follow the established code style patterns in
 ### Current Structure
 ```
 src/
-├── components/           # React components
+├── component/              # React components
 │   ├── BudgetControl.tsx
 │   ├── Error.tsx
 │   ├── Expense.tsx
+│   ├── Expense.module.css
 │   ├── ExpensesList.tsx
+│   ├── ExpensesList.module.css
 │   ├── Form.tsx
 │   └── Question.tsx
-├── contexts/            # React Context providers
+├── contexts/              # React Context providers
 │   └── BudgetContext.tsx
-├── hooks/               # Custom React hooks
+├── hooks/                 # Custom React hooks
 │   ├── useBudgetCalculation.ts
 │   └── useForm.ts
-├── types/               # TypeScript type definitions
+├── types/                 # TypeScript type definitions
 │   ├── css.d.ts
 │   └── index.ts
-├── App.tsx              # Main app component
-├── App.module.css       # App component styles
-├── helpers.ts           # Utility functions
-├── index.css           # Global styles
-└── index.tsx           # Entry point
+├── App.tsx                # Main app component
+├── App.module.css         # App component styles
+├── helpers.ts             # Utility functions
+├── index.css             # Global styles
+└── index.tsx             # Entry point
+root/
+├── index.html            # HTML entry point (Vite)
+├── vite.config.ts        # Vite configuration
+├── package.json          # Dependencies (Vite + React)
+├── tsconfig.json         # TypeScript configuration
+└── public/              # Static assets
 ```
 
 ### React Components
