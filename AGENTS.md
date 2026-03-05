@@ -28,10 +28,10 @@ Launches Jest test runner in interactive watch mode.
 npm test -- --testNamePattern="test name"
 
 # Run tests in specific file
-npm test -- --testPathPattern=path/to/test.js
+npm test -- --testPathPattern=path/to/test.tsx
 
 # Run tests in watch mode for specific file
-npm test -- --testPathPattern=path/to/test.js --watchAll=false
+npm test -- --testPathPattern=path/to/test.tsx --watchAll=false
 ```
 
 #### Test Coverage
@@ -43,30 +43,53 @@ Generates coverage reports.
 ### Linting
 ESLint is configured with the default Create React App rules. Lint errors appear in the console during development.
 
-To run linting manually (after ejecting):
+To run linting manually:
 ```bash
 npx eslint src/
 ```
 
+### Type Checking
+```bash
+npx tsc --noEmit
+```
+Runs TypeScript type checking without emitting files.
+
 ### Code Formatting
 No dedicated formatter configured. Follow the established code style patterns in the codebase.
 
-## Code Style Guidelines
+## Project Structure
 
-### Project Structure
-- Components: Place in `src/component/` directory
-- Utilities: Place in `src/helpers.js`
-- Main app: `src/App.js`
-- Entry point: `src/index.js`
-- Styles: `src/index.css`
-- Public assets: `public/` directory
+### Current Structure
+```
+src/
+├── components/           # React components
+│   ├── BudgetControl.tsx
+│   ├── Error.tsx
+│   ├── Expense.tsx
+│   ├── ExpensesList.tsx
+│   ├── Form.tsx
+│   └── Question.tsx
+├── contexts/            # React Context providers
+│   └── BudgetContext.tsx
+├── hooks/               # Custom React hooks
+│   ├── useBudgetCalculation.ts
+│   └── useForm.ts
+├── types/               # TypeScript type definitions
+│   ├── css.d.ts
+│   └── index.ts
+├── App.tsx              # Main app component
+├── App.module.css       # App component styles
+├── helpers.ts           # Utility functions
+├── index.css           # Global styles
+└── index.tsx           # Entry point
+```
 
 ### React Components
 
 #### Component Declaration
 Use function components with hooks. Prefer arrow functions for consistency:
-```javascript
-const ComponentName = ({ prop1, prop2 }) => {
+```typescript
+const ComponentName: React.FC<Props> = ({ prop1, prop2 }) => {
   // component logic
   return (
     // JSX
@@ -75,8 +98,8 @@ const ComponentName = ({ prop1, prop2 }) => {
 ```
 
 For complex components, function declarations are acceptable:
-```javascript
-function ComponentName({ prop1, prop2 }) {
+```typescript
+function ComponentName({ prop1, prop2 }: Props) {
   // component logic
   return (
     // JSX
@@ -85,32 +108,33 @@ function ComponentName({ prop1, prop2 }) {
 ```
 
 #### Props Handling
-Destructure props in the function parameter when possible:
-```javascript
-const BudgetControl = ({ budget, remaining }) => {
-  // use budget and remaining directly
+Always use TypeScript types/interfaces for props:
+```typescript
+interface ExpenseProps {
+  expense: Expense;
+}
+
+const Expense: React.FC<ExpenseProps> = ({ expense }) => {
+  // use expense directly
 };
 ```
 
-For components receiving many props, destructure inside the function:
-```javascript
-function Form(props) {
-  const { setExpense, setCreateExpense } = props;
-  // rest of component
-}
+#### State Management
+Use Context API for global state. Access via custom hooks:
+```typescript
+const { budget, remaining, expenses } = useBudget();
 ```
 
-#### State Management
-Use `useState` hook with descriptive variable names:
-```javascript
-const [budget, setBudget] = useState(0);
-const [remaining, setRemaining] = useState(0);
-const [expenses, setExpenses] = useState([]);
+For local component state:
+```typescript
+const [budget, setBudget] = useState<number>(0);
+const [remaining, setRemaining] = useState<number>(0);
+const [expenses, setExpenses] = useState<Expense[]>([]);
 ```
 
 #### Effects
 Use `useEffect` with proper dependency arrays:
-```javascript
+```typescript
 useEffect(() => {
   // effect logic
 }, [dependency1, dependency2]);
@@ -121,18 +145,21 @@ useEffect(() => {
 #### Import Order
 1. React and React hooks
 2. Third-party libraries
-3. Local components/utilities
+3. Local components/hooks/contexts
+4. Type definitions
 
-```javascript
+```typescript
 import React, { useState, useEffect } from 'react';
-import shortid from 'shortid';
+import { nanoid } from 'nanoid';
 import Question from './component/Question';
-import { checkBudget } from '../helpers';
+import { useBudget } from './contexts/BudgetContext';
+import { useForm } from './hooks/useForm';
+import { Expense } from '../types';
 ```
 
-#### Import Alignment
-Align import statements for readability (following existing pattern):
-```javascript
+#### Imports Alignment
+Align import statements for readability:
+```typescript
 import React, { useState, useEffect } from 'react';
 import Question                       from './component/Question';
 import Form                           from './component/Form';
@@ -140,9 +167,16 @@ import ExpensesList                   from './component/ExpensesList';
 ```
 
 #### Exports
-Use default exports at the end of the file:
-```javascript
+Use default exports for components:
+```typescript
 export default ComponentName;
+```
+
+Use named exports for hooks, utilities, and types:
+```typescript
+export const useBudget = () => { ... };
+export const checkBudget = (budget: number, remaining: number): string => { ... };
+export interface Expense { ... };
 ```
 
 ### Naming Conventions
@@ -152,6 +186,9 @@ export default ComponentName;
 
 #### Variables and Functions
 - camelCase: `budget`, `setBudget`, `checkBudget`, `addExpense`
+
+#### TypeScript Types
+- PascalCase with descriptive names: `Expense`, `BudgetState`, `ExpenseProps`
 
 #### State Variables
 - Descriptive names: `budgetQuestion`, `createExpense`
@@ -164,12 +201,12 @@ export default ComponentName;
 
 #### Formatting
 - Multi-line JSX for readability
-- Consistent indentation (2 spaces)
+- Consistent indentations (2 spaces)
 - Self-closing tags when no children
 
 #### Conditional Rendering
 Use ternary operators for simple conditions:
-```javascript
+```typescript
 {
   error ?
     <Error message="Both fields are required" />
@@ -181,92 +218,131 @@ For complex conditions, use early returns or variables.
 
 #### Event Handlers
 Define handlers as arrow functions:
-```javascript
-const addExpense = e => {
+```typescript
+const addExpense = (e: React.FormEvent) => {
   e.preventDefault();
   // handler logic
 };
 ```
 
-Inline handlers are acceptable for simple cases:
-```javascript
-onChange={e => setExpenseName(e.target.value)}
+### TypeScript Best Practices
+
+#### Type Definitions
+Always define types for props, state, and data structures:
+```typescript
+interface Expense {
+  id: string;
+  expenseName: string;
+  expenseAmount: number;
+}
+
+interface ExpenseProps {
+  expense: Expense;
+}
 ```
 
-### JavaScript Best Practices
+#### Generic Hooks
+Use generics for reusable hooks:
+```typescript
+export const useForm = <T extends Record<string, any>>(
+  initialValues: T,
+  validationFn?: (values: T) => boolean
+) => {
+  // hook logic
+};
+```
 
-#### Functions
-Use arrow functions for consistency:
-```javascript
-const checkBudget = (budget, remaining) => {
+#### Context Types
+Define proper types for Context:
+```typescript
+const BudgetContext = createContext<BudgetContextType | undefined>(undefined);
+```
+
+### CSS and Styling
+
+#### CSS Modules
+Use CSS Modules for component-scoped styles:
+```typescript
+import styles from './Component.module.css';
+
+<div className={styles.container}>
+```
+
+#### Global Styles
+Use `index.css` for global variables and shared styles:
+```css
+:root {
+  --bg-primary: #fefefe;
+  --accent-main: #74b9ff;
+}
+```
+
+### Utility Functions
+
+#### Location
+Place utility functions in `src/helpers.ts`
+
+#### Export Pattern
+Use named exports with TypeScript types:
+```typescript
+export const checkBudget = (budget: number, remaining: number): string => {
   // logic
 };
 ```
 
-#### Variable Declarations
-Use `const` by default, `let` only when reassignment is needed.
+### Custom Hooks
 
-#### Object Creation
-Use shorthand property names:
-```javascript
-const expense = {
-  expenseName,
-  expenseAmount,
-  id: shortid.generate()
+#### Creating Custom Hooks
+Extract reusable logic into custom hooks:
+```typescript
+// src/hooks/useForm.ts
+export const useForm = <T extends Record<string, any>>(
+  initialValues: T,
+  validationFn?: (values: T) => boolean
+) => {
+  const [values, setValues] = useState<T>(initialValues);
+  const [error, setError] = useState<boolean>(false);
+
+  // ... return values, handlers, etc.
+
+  return { values, error, handleChange, handleSubmit, reset };
 };
 ```
 
-#### Array Operations
-Use spread operator for immutable updates:
-```javascript
-const expensesList = [...expenses, expense];
+### Context API
+
+#### Creating Context
+Wrap application with providers in `index.tsx`:
+```typescript
+<BudgetProvider>
+  <App />
+</BudgetProvider>
+```
+
+#### Using Context
+Access context via custom hooks:
+```typescript
+const { budget, remaining, expenses } = useBudget();
 ```
 
 ### Error Handling
 
 #### Form Validation
-Use state to track errors:
-```javascript
-const [error, setError] = useState(false);
-
-// In validation logic
-if (expenseAmount < 1 || isNaN(expenseAmount) || expenseName === "") {
-  setError(true);
-  return;
-}
+Use the `useForm` hook's validation function:
+```typescript
+const validationFn = (values: FormValues) => {
+  return values.expenseAmount >= 1 && values.expenseName !== "";
+};
 ```
 
 #### Error Display
 Render error components conditionally:
-```javascript
+```typescript
 {
   error ?
     <Error message="Both fields are required" />
     : null
 }
-```
-
-### CSS and Styling
-
-#### Class Names
-- Use descriptive class names: `main-content`, `field`
-- Follow BEM-like conventions where applicable
-- Use utility classes from the CSS framework: `u-full-width`, `button-primary`
-
-#### Inline Styles
-Avoid inline styles. Use CSS classes instead.
-
-### Utility Functions
-
-#### Location
-Place utility functions in `src/helpers.js`
-
-#### Export Pattern
-Use named exports:
-```javascript
-export const checkBudget = (budget, remaining) => {
-  // logic
-};
 ```
 
 ### Comments
@@ -276,38 +352,43 @@ export const checkBudget = (budget, remaining) => {
 - Add comments for complex logic
 - Avoid obvious comments
 
-```javascript
-// Check 25%
+```typescript
+// Check if remaining is below 25% of budget
 if ((budget / 4) > remaining) {
   // logic
 }
 ```
 
-### TypeScript (Future Consideration)
-This project currently uses JavaScript. If migrating to TypeScript:
-- Use explicit types for props and state
-- Define interfaces for complex objects
-- Use `FC<Props>` for component types
-
 ### Testing Guidelines
 
 #### Test File Structure
-Place test files alongside components: `Component.test.js`
+Place test files alongside components: `Component.test.tsx`
 
 #### Testing Patterns
 - Test component rendering
 - Test user interactions
 - Test state changes
 - Test utility functions
+- Test custom hooks
 
 #### Example Test Structure
-```javascript
+```typescript
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import Form from './Form';
 
-test('renders form correctly', () => {
-  // test logic
+describe('Form', () => {
+  test('renders form correctly', () => {
+    render(<Form />);
+    expect(screen.getByText('Add your expenses here')).toBeInTheDocument();
+  });
+
+  test('shows error when fields are empty', async () => {
+    render(<Form />);
+    await userEvent.click(screen.getByRole('button', { name: /add expense/i }));
+    expect(screen.getByText('Both fields are required')).toBeInTheDocument();
+  });
 });
 ```
 
@@ -325,7 +406,7 @@ test('renders form correctly', () => {
 ### Performance Considerations
 
 #### Re-renders
-- Memoize expensive calculations
+- Memoize expensive calculations with `useMemo`
 - Use `useCallback` for event handlers passed as props
 - Optimize `useEffect` dependencies
 
